@@ -27,10 +27,17 @@
 
 .text-danger{
     color: red;
-    margin-top: -20px;
+    margin-top: -30px;
     margin-bottom: 0%;
+    text-align: right;
 }
 
+.messageBox{
+    padding: 15px;
+    resize: none;
+    margin-bottom:15px;
+    font-family: inherit;
+}
 .btns{
     padding-left: 5px;
     padding-right: 5px;

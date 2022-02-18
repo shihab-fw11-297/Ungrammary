@@ -3,24 +3,14 @@ import { useState } from 'react';
 import './main.css';
 import Banner from './Group 1822.png';
 import ReactFlagsSelect from 'react-flags-select';
-import { makeStyles } from '@mui/styles';
-
-//for submit button styles
-const useStyle = makeStyles({
-    btn: {
-        padding: '10px 20px 10px 20px',
-        marginTop: '10px',
-    }
-})
+import validator from 'validator';
 
 const Main = () => {
-    const classes = useStyle();
     const [selected, setSelected] = useState('IN')
 
     //phone number validation
     const [phoneNumber, setPhoneNumber] = useState("");
     const [errorPhone, setErrorPhone] = useState(false);
-
 
     const phoneNumberCheck = (e) => {
         let x = e.which || e.keycode;
@@ -37,6 +27,7 @@ const Main = () => {
     //name input box checking and give alert
     const [name, setName] = useState("");
     const [errorName, setErrorName] = useState(false);
+    
     const NameCheck = (e) => {
         let x = e.which || e.keycode;
         if ((x >= 65 && x <= 90) || (x >= 97 && x <= 122) || x === 32) {
@@ -49,17 +40,15 @@ const Main = () => {
 
 
     //Email input box checking and give alert
-    const [Errors, setError] = useState(false)
-    function containsSpecialChars(str) {
-        const specialChars = /[`!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
-        return specialChars.test(str);
-    }
-
-    const EmailsCheck = (e) => {
-        setError({
-            ...Errors,
-            name: containsSpecialChars(e.target.value)
-        })
+    const [emailError, setEmailError] = useState(false)
+    const validateEmail = (e) => {
+      var email = e.target.value
+    
+      if (validator.isEmail(email)) {
+        setEmailError(false)
+      } else {
+        setEmailError(true)
+      }
     }
 
     return (
@@ -76,7 +65,7 @@ const Main = () => {
                     <form>
 
                         <TextField fullWidth label='Phone no' variant="outlined" name='phone' onKeyPress={(e) => phoneNumberCheck(e)} />
-                        <div className={errorPhone ? ("text-danger") : ("d-none")}>Phone Number Should not be empty or any charecters</div>
+                        <div className={errorPhone ? ("text-danger") : ("d-none")}>Alphabets or Special Charecters are not allowed</div>
 
                         <FormControl>
                             <ReactFlagsSelect
@@ -90,15 +79,15 @@ const Main = () => {
                     
                     
                         <TextField fullWidth label='Enter Name' variant="outlined" name='fullName' onKeyPress={(e) => NameCheck(e)} />
-                        <div className={errorName ? ("text-danger") : ("d-none")}>Name Should not valid formate</div>
+                        <div className={errorName ? ("text-danger") : ("d-none")}>Special Charecters or Number are not allowed</div>
                         
                         
-                        <TextField fullWidth label='Email Address' variant="outlined" name='email' onKeyPress={(e) => EmailsCheck(e)} />
-                        <div className={Errors.name ? ("text-danger ErrorMsg") : ("d-none")}>Special Charector Not Allowed & Not Empty</div>
+                        <TextField fullWidth label='Email Address' variant="outlined" name='email' onChange={(e) => validateEmail(e)} />
+                        <div className={emailError ? ("text-danger") : ("d-none")}>Email should be valid formate or Special Charector Not Allowed</div>
                         
                         
                         <TextareaAutosize
-                            style={{ padding: "15px", resize: "none" }}
+                            className='messageBox'
                             minRows={7}
                             variant="outlined"
                             aria-label="maximum height"
@@ -107,9 +96,7 @@ const Main = () => {
                         />
                     </form>
                     
-                    <Button variant='contained'
-                        className={classes.btn}
-                    >Submit</Button>
+                    <Button variant='contained'>Submit</Button>
                 </div>
             </div>
         </>
